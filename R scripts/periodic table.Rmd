@@ -1,0 +1,92 @@
+---
+title: "Periodic table"
+author: "Pritish Karmakar"
+date: "2022-07-22"
+output: html_document
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(janitor)
+```
+
+```{r}
+p_table <- read.csv('https://raw.githubusercontent.com/BenPalmer1983/atomic_dictionaries/master/data_files/elements.csv')
+```
+
+```{r}
+p_table
+```
+
+```{r}
+p_table <- clean_names(p_table)
+p_table
+```
+
+```{r}
+p_table <- rename(p_table, 
+                  nutrons=numberof_neutrons,
+                  protons=numberof_protons,
+                  electrons= numberof_electrons,
+                  isotope=number_of_isotopes,
+                  shells=numberof_shells,
+                  valence=numberof_valence
+                  )
+p_table
+```
+
+```{r}
+ggplot(p_table)+ geom_point(aes(x=protons,y=nutrons,color=radioactive))
+```
+
+```{r}
+ggplot(p_table, aes(x = type, y = boiling_point))+ geom_boxplot()
+```
+
+```{r}
+ggplot(data = p_table,
+       mapping = aes(x = atomic_number,
+                     y = first_ionization)) +
+  geom_point(aes(colour = period)) +
+  geom_line(col = 'pink')+
+  geom_smooth()
+```
+
+```{r}
+ggplot(p_table, aes(x = boiling_point))+ geom_density()
+```
+
+```{r}
+ggplot(data = p_table,
+       mapping = aes(x = atomic_number,
+                     y = electronegativity)) +
+  geom_point(aes(colour = period)) +
+  geom_line(col = 'red')+
+  geom_smooth(size =0.5)
+```
+
+```{r}
+ggplot(data = p_table,
+       mapping = aes(x = isotope)) +
+  geom_histogram(binwidth = 1)
+```
+
+```{r}
+ggplot(data = p_table,
+       mapping = aes(x = atomic_number,
+                     y = nutrons/protons)) +
+  geom_point(aes(col = radioactive)) +
+  geom_line(col = 'red',size = 0.3)+
+  geom_smooth(size =0.3)
+```
+
+```{r}
+ggplot(data = p_table,
+       mapping = aes(x = electronegativity,
+                     y = first_ionization)) +
+  geom_point(aes(colour = phase)) +
+  scale_colour_viridis_d()+
+  geom_line(col = 'red',size = 0.3)+
+  geom_smooth(size = 0.3)
+```
